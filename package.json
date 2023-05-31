@@ -9,12 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/server": "^4.7.1",
     "@types/node": "20.2.5",
+    "graphql": "^16.6.0",
     "next": "13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "sass": "^1.62.1",
-    "sharp": "^0.32.1"
+    "sharp": "^0.32.1",
+    "tsx": "^3.12.7"
   },
   "devDependencies": {
     "@types/react": "18.2.7",
