@@ -12,6 +12,7 @@ import {
   getAnimals,
   updateAnimalById,
 } from '../../../database/animals';
+import { isUserAdminBySessionToken } from '../../../database/users';
 import { createFakeLoginSession } from '../../../util/loginAction';
 import { deleteFakeLoginSession } from '../../../util/logoutAction';
 
@@ -28,6 +29,10 @@ type Args = {
 type LoginArgument = {
   username: string;
   password: string;
+};
+
+type FakeAdminAnimalContext = {
+  isAdmin: boolean;
 };
 
 type LogoutArgument = { fakeSessionToken: string | undefined };
@@ -94,7 +99,14 @@ const resolvers = {
       return await createAnimal(args.firstName, args.type, args.accessory);
     },
 
-    deleteAnimalById: async (parent: null, args: Args) => {
+    deleteAnimalById: async (
+      parent: null,
+      args: Args,
+      context: FakeAdminAnimalContext,
+    ) => {
+      if (!context.isAdmin) {
+        throw new GraphQLError('Unauthorized operation');
+      }
       return await deleteAnimalById(parseInt(args.id));
     },
 
@@ -152,8 +164,13 @@ const apolloServer = new ApolloServer({
 });
 
 const handler = startServerAndCreateNextHandler<NextRequest>(apolloServer, {
-  context: async (req, res) => {
-    return { req, res };
+  context: async (req) => {
+    // FIXME: Implement secure authentication
+    const fakeSessionToken = req.cookies.get('fakeSession');
+
+    const isAdmin = await isUserAdminBySessionToken(fakeSessionToken?.value);
+
+    return { req, isAdmin };
   },
 });
 
