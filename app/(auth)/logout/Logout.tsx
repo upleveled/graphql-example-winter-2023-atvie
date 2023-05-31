@@ -15,7 +15,11 @@ const logoutMutation = gql`
   }
 `;
 
-export default function Logout(props: any) {
+type Props = {
+  fakeSessionToken: string;
+};
+
+export default function Logout(props: Props) {
   const [onError, setOnError] = useState('');
   const router = useRouter();
 
@@ -38,7 +42,7 @@ export default function Logout(props: any) {
       await logoutHandler();
     };
     logout();
-  }, [props.username]);
+  }, [props.fakeSessionToken]);
 
   return null;
 }

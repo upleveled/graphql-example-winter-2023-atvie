@@ -128,7 +128,7 @@ const resolvers = {
       );
     },
 
-    login: async (parent: null, args: LoginArgument, context: any) => {
+    login: async (parent: null, args: LoginArgument) => {
       // FIXME: Implement secure authentication
       if (
         typeof args.username !== 'string' ||
