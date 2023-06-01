@@ -3,6 +3,7 @@ import { ApolloServer } from '@apollo/server';
 import { startServerAndCreateNextHandler } from '@as-integrations/next';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { GraphQLError } from 'graphql';
+import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
 import {
   createAnimal,
@@ -13,8 +14,6 @@ import {
   updateAnimalById,
 } from '../../../database/animals';
 import { isUserAdminBySessionToken } from '../../../database/users';
-import { createFakeLoginSession } from '../../../util/loginAction';
-import { deleteFakeLoginSession } from '../../../util/logoutAction';
 
 type AnimalInput = {
   firstName: string;
@@ -143,13 +142,24 @@ const resolvers = {
         throw new GraphQLError('Invalid username or password');
       }
 
-      await createFakeLoginSession(args.username);
+      // Creating a fake login session cookies
+      await cookies().set('fakeSession', args.username, {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+      });
 
       return await getAnimalByFirstName(args.username);
     },
 
     logout: async (parent: null, args: LogoutArgument) => {
-      await deleteFakeLoginSession(args.fakeSessionToken);
+      // Deleting a fake login session token
+      if (!args.fakeSessionToken) return undefined;
+      await cookies().set(args.fakeSessionToken, '', {
+        path: '/',
+        maxAge: -1,
+      });
     },
   },
 };
