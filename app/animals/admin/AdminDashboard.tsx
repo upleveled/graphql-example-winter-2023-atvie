@@ -1,7 +1,7 @@
 'use client';
 
 import { gql, useMutation } from '@apollo/client';
-import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -100,11 +100,7 @@ export default function AdminDashboard() {
     },
   });
 
-  const { loading, data, refetch } = useQuery<AnimalResponse>(getAnimals, {
-    onCompleted: async () => {
-      await refetch();
-    },
-  });
+  const { data, refetch } = useSuspenseQuery<AnimalResponse>(getAnimals);
 
   const [handleDeleteAnimal] = useMutation(deleteAnimalMutation, {
     onError: (error) => {
@@ -189,8 +185,6 @@ export default function AdminDashboard() {
       <br />
       <hr />
       <br />
-
-      {loading && <p>Loading...</p>}
       <p className="error">{onError}</p>
 
       {data?.animals.map((animal) => {
