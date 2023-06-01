@@ -149,6 +149,7 @@ const resolvers = {
     },
 
     logout: async (parent: null, args: LogoutArgument) => {
+      // FIXME: Implement secure authentication
       await deleteFakeLoginSession(args.fakeSessionToken);
     },
   },
