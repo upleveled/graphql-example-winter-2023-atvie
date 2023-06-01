@@ -154,6 +154,8 @@ const resolvers = {
     },
 
     logout: async (parent: null, args: LogoutArgument) => {
+      // FIXME: Implement secure authentication
+
       // Deleting a fake login session token
       if (!args.fakeSessionToken) return undefined;
       await cookies().set(args.fakeSessionToken, '', {
