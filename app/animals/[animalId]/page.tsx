@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 import Image from 'next/image';
-import { getClient } from '../../../util/client';
+import { getClient } from '../../../util/apolloClient';
 
 export const dynamic = 'force-dynamic';
 

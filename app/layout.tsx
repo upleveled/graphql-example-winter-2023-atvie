@@ -3,8 +3,8 @@ import { gql } from '@apollo/client';
 import { Inter } from 'next/font/google';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
-import { ApolloClientProvider } from '../util/ApolloClientProvider';
-import { getClient } from '../util/client';
+import { getClient } from '../util/apolloClient';
+import { ApolloClientProvider } from './ApolloClientProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 

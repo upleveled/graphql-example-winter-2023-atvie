@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { getClient } from '../../../util/client';
+import { getClient } from '../../../util/apolloClient';
 import AdminDashboard from './AdminDashboard';
 
 export default async function AnimalsAdminPage() {
